@@ -1,0 +1,64 @@
+{
+  "name": "Send Telegram Message",
+  "id": "1P1959FVmKKcKHik",
+  "nodes": [
+    {
+      "id": "a7db18c2-0175-42aa-8315-4a4b462e0c21",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "name": "When Called by Another Workflow"
+    },
+    {
+      "id": "89e99523-6443-4203-be1f-85fd79f1294c",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        300,
+        0
+      ],
+      "parameters": {
+        "resource": "message",
+        "operation": "sendMessage",
+        "chatId": "1449057581",
+        "text": "={{ $json.message }}",
+        "additionalFields": {}
+      },
+      "name": "Send Message",
+      "credentials": {
+        "telegramApi": {
+          "id": "Jz8SYZUy4ZI64Jph",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "When Called by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Send Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e9e21e21-0051-4071-bce1-700640c2c653",
+  "meta": {
+    "instanceId": "7ecfd24a75947a3c2c133cbc6e9a74f45a40c1810a644c0bf08dee352ca22228"
+  },
+  "tags": []
+}

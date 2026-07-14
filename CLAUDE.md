@@ -27,4 +27,19 @@ Nodes:
 
 Known quirk: the `n8n-workflow-builder-dev` MCP container's local schema validator currently reports `unknown_node_type` for every node (its static catalog is empty — `get_n8n_version_info` shows `supportedNodesCount: 0`), even for core nodes like `if`/`noOp`. This is cosmetic; the live n8n instance accepts the workflow without issue, so treat `validate_workflow` output as unreliable until that catalog is repopulated.
 
+## Reusable notifier: `Send Telegram Message`
+
+A small sub-workflow (`workflow_data/Send Telegram Message.json`, live id `1IrnXdUpfHhhT5R8`, **active** — sub-workflows must be published for other live workflows to reference them via Execute Workflow) meant to be called from any other workflow that wants to notify this Telegram chat:
+
+1. **When Called by Another Workflow** (`n8n-nodes-base.executeWorkflowTrigger`, `inputSource: passthrough`) — receives whatever JSON the caller sends, e.g. `{ "message": "..." }`.
+2. **Send Message** (`n8n-nodes-base.telegram`, `resource: message`, `operation: sendMessage`) — sends `{{ $json.message }}` to the hardcoded chat ID `1449057581` using the same Telegram API credential as `Telegram Bot`.
+
+Call it from another workflow with an **Execute Workflow** node (`source: database`, `workflowId.value: 1IrnXdUpfHhhT5R8`), passing `workflowInputs.value.message` as the text to send.
+
+## Cross-project integration: `Pocket - Inbound` → Telegram notify
+
+`Pocket - Inbound` (live id `2UI2FJmTqSxx3MpH`) is a pre-existing production-ish workflow that isn't otherwise part of this repo — it verifies an HMAC-signed webhook from Pocket, dedups by `recording_id`, fetches the completed recording/transcript, normalizes the payload, and hands it off to an assistant webhook. A local copy lives at `workflow_data/Pocket - Inbound.json` **for reference only** — it omits the live `staticData` (the dedup `seenEvents` map), which is runtime state, not workflow definition, and shouldn't be tracked in git or treated as a source of truth; the live n8n instance is authoritative for that workflow.
+
+Added a **Pocket - Notify Telegram** node (`n8n-nodes-base.executeWorkflow`) branching off `Pocket - Normalize payload` in parallel with the existing `Pocket - Handoff to Assistant` call, so a Telegram notification firing/failing never blocks or risks that handoff. It calls `Send Telegram Message` with `message: "🎙️ Pocket transcription complete: {{ $json.title || $json.recording_id }}"`.
+
 When more code is added to this repo (custom nodes, supporting services, etc.), update this file with the actual build/lint/test commands and architecture.
