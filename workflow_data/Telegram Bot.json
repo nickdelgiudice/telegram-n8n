@@ -38,7 +38,7 @@
             {
               "id": "chat-id-check",
               "leftValue": "={{ $json.message.chat.id }}",
-              "rightValue": "YOUR_TELEGRAM_CHAT_ID",
+              "rightValue": 0,
               "operator": {
                 "type": "number",
                 "operation": "equals"
