@@ -12,11 +12,18 @@
       ],
       "parameters": {
         "updates": [
-          "message"
+          "*"
         ],
         "additionalFields": {}
       },
-      "name": "Telegram Trigger"
+      "name": "Telegram Trigger",
+      "webhookId": "046ec525-955a-4f9c-8ee6-1524b98f2214",
+      "credentials": {
+        "telegramApi": {
+          "id": "Jz8SYZUy4ZI64Jph",
+          "name": "Telegram account"
+        }
+      }
     },
     {
       "id": "881145ac-2e72-4439-809e-d1793a470489",
@@ -31,21 +38,24 @@
           "options": {
             "caseSensitive": true,
             "leftValue": "",
-            "typeValidation": "strict"
+            "typeValidation": "loose",
+            "version": 3
           },
-          "combinator": "and",
           "conditions": [
             {
               "id": "chat-id-check",
               "leftValue": "={{ $json.message.chat.id }}",
-              "rightValue": 0,
+              "rightValue": 1449057581,
               "operator": {
                 "type": "number",
                 "operation": "equals"
               }
             }
-          ]
-        }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
       },
       "name": "Chat ID Gate"
     },
