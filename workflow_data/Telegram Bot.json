@@ -1,0 +1,97 @@
+{
+  "name": "Telegram Bot",
+  "id": "Xl8yd28UKcV1V4GL",
+  "nodes": [
+    {
+      "id": "ba185303-a4cc-46ac-b5f6-edd25c0c4619",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "name": "Telegram Trigger"
+    },
+    {
+      "id": "881145ac-2e72-4439-809e-d1793a470489",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        300,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "chat-id-check",
+              "leftValue": "={{ $json.message.chat.id }}",
+              "rightValue": "YOUR_TELEGRAM_CHAT_ID",
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ]
+        }
+      },
+      "name": "Chat ID Gate"
+    },
+    {
+      "id": "b5b46e73-fedb-440e-aea3-23c7f1765394",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        600,
+        -80
+      ],
+      "parameters": {},
+      "name": "Downstream Placeholder"
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Chat ID Gate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Chat ID Gate": {
+      "main": [
+        [
+          {
+            "node": "Downstream Placeholder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "d8903901-252f-4980-b4f3-a7603bbdcb79",
+  "meta": {
+    "instanceId": "2c3876fee81f5b462429a8aa97a44532ed7984568e283fa461c7d32d98cacd39"
+  },
+  "tags": []
+}
