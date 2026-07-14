@@ -1,5 +1,3 @@
-<img src="https://r2cdn.perplexity.ai/pplx-full-logo-primary-dark%402x.png" style="height:64px;margin-right:32px"/>
-
 # I think I installed Telegram Air on my laptop and we started at some point to setup the bot but I do not recall it now. What is the fastest path to hook Telegram to n8n?
 
 Fastest path: **create a bot with BotFather → add Telegram credentials in n8n → drop a Telegram Trigger node → make sure n8n has a public HTTPS URL (WEBHOOK_URL) → test by messaging the bot.**[^1][^2][^3]
